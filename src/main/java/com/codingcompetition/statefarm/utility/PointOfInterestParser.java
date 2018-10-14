@@ -10,14 +10,9 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 public class PointOfInterestParser {
 
@@ -27,6 +22,13 @@ public class PointOfInterestParser {
     private Stack<PointOfInterest> objects = new Stack<PointOfInterest>();
     private String startLat, endLat, startLong, endLong;
 
+    /**
+     * Parses XML file and returns list of PointOfInterest
+     * @param fileName XML file
+     * @return list of points of interest
+     * @throws IOException file not found
+     * @throws SAXException XML parsing exception
+     */
     public List<PointOfInterest> parse(String fileName) throws IOException, SAXException {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         try {
@@ -34,10 +36,9 @@ public class PointOfInterestParser {
             PointHandler handler = new PointHandler();
             saxParser.parse(new File("src/main/resources" + fileName), handler);
             return handler.getPoints();
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            throw new SAXException(e);
         }
-        return null;
     }
 
     //Handler to parse data with SAX
@@ -45,15 +46,26 @@ public class PointOfInterestParser {
         private List<PointOfInterest> pointsOfInterest;
         private PointOfInterest currentPoint;
 
+        /**
+         * Starts at beginning of XML
+         * @throws SAXException XML parsing exception
+         */
         @Override
         public void startDocument() throws SAXException {
             super.startDocument();
             pointsOfInterest = new ArrayList<>();
         }
 
+        /**
+         * Beginning of XML element
+         * @param uri url
+         * @param localName name
+         * @param qName qName
+         * @param attributes attributes
+         * @throws SAXException XML parsing exception
+         */
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-            //System.out.println(qName);
             if (qName.toLowerCase().equals("node")) {
                 currentPoint = new PointOfInterest();
                 for (int i = 0; i < attributes.getLength(); i++) {
@@ -87,6 +99,13 @@ public class PointOfInterestParser {
             }
         }
 
+        /**
+         * End of XML element
+         * @param uri url
+         * @param localName localName
+         * @param qName qName
+         * @throws SAXException XML parsing exception
+         */
         @Override
         public void endElement(String uri, String localName, String qName) throws SAXException {
             if (qName.toLowerCase().equals("node")) {
@@ -94,6 +113,10 @@ public class PointOfInterestParser {
             }
         }
 
+        /**
+         * Getter for pointsOfInterest
+         * @return pointsOfInterest
+         */
         public List<PointOfInterest> getPoints() {
             return pointsOfInterest;
         }
