@@ -86,11 +86,16 @@ public class StreetMapDataInterpreter implements Interpreter {
         Collection<SearchCriteria> criterias = prioritizedCriteria.values();
 
         for (PointOfInterest p: this.points) {
+            boolean perfectFit = true;
             for (SearchCriteria criteria: criterias) {
-                if (fitsCriteria(p, criteria)) {
-                    results.add(p);
+                if (!fitsCriteria(p, criteria)) {
+                    perfectFit = false;
                     break;
                 }
+            }
+
+            if (perfectFit) {
+                results.add(p);
             }
 
         }
