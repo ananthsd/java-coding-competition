@@ -6,10 +6,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class StreetMapDataInterpreter implements Interpreter {
@@ -36,6 +33,32 @@ public class StreetMapDataInterpreter implements Interpreter {
         return this.points;
     }
 
+    private boolean fitsCriteria(PointOfInterest p, SearchCriteria c) {
+        if (c.getCat().name().equals("NAMESTARTSWITH")) {
+            Collection<String> descriptorValues = p.getDescriptors().values();
+            for (String dV: descriptorValues) {
+                if (dV.startsWith(c.getValue())) {
+                    return true;
+                }
+            }
+
+        } else if (c.getCat().name().equals("NAMEENDSWITH")) {
+            Collection<String> descriptorValues = p.getDescriptors().values();
+            for (String dV: descriptorValues) {
+                if (dV.endsWith(c.getValue())) {
+                    return true;
+                }
+            }
+
+        } else {
+            String value = p.getDescriptors().get(c.getCat().name().toLowerCase());
+            if (c.getValue().equals(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public List<PointOfInterest> interpret(SearchCriteria criteria) {
         List<PointOfInterest> results = new ArrayList<>();
@@ -43,33 +66,8 @@ public class StreetMapDataInterpreter implements Interpreter {
             return results;
         }
 
-
-
         for (PointOfInterest p: this.points) {
-
-            if (criteria.getCat().name().equals("NAMESTARTSWITH")) {
-                Set<Object> descriptorKeys = p.getDescriptors().keySet();
-                for (Object dKey: descriptorKeys) {
-                    String dKeyString = (String)dKey;
-                    if (dKeyString.startsWith(criteria.getValue())) {
-                        results.add(p);
-                    }
-                }
-
-            } else if (criteria.getCat().name().equals("NAMEENDSWITH")) {
-                Set<Object> descriptorKeys = p.getDescriptors().keySet();
-                for (Object dKey: descriptorKeys) {
-                    String dKeyString = (String)dKey;
-                    if (dKeyString.endsWith(criteria.getValue())) {
-                        results.add(p);
-                    }
-                }
-
-            }
-
-
-            String value = p.getDescriptors().get(criteria.getCat().name().toLowerCase());
-            if (criteria.getValue().equals(value)) {
+            if (fitsCriteria(p, criteria)) {
                 results.add(p);
             }
 
@@ -80,10 +78,24 @@ public class StreetMapDataInterpreter implements Interpreter {
 
     @Override
     public List<PointOfInterest> interpret(Map<Integer, SearchCriteria> prioritizedCriteria) {
+        List<PointOfInterest> results = new ArrayList<>();
         if (prioritizedCriteria == null) {
-            return new ArrayList<>();
+            return results;
         }
-        return null;
+
+        Collection<SearchCriteria> criterias = prioritizedCriteria.values();
+
+        for (PointOfInterest p: this.points) {
+            for (SearchCriteria criteria: criterias) {
+                if (fitsCriteria(p, criteria)) {
+                    results.add(p);
+                    break;
+                }
+            }
+
+        }
+
+        return results;
     }
 
     @Override
@@ -95,10 +107,8 @@ public class StreetMapDataInterpreter implements Interpreter {
 
         for (PointOfInterest p: this.points) {
             for (SearchCriteria criteria: criterias) {
-                String value = p.getDescriptors().get(criteria.getCat().name().toLowerCase());
-                if (value != null && value.equals(criteria.getValue())) {
+                if (fitsCriteria(p, criteria)) {
                     results.add(p);
-                    break;
                 }
             }
 
@@ -106,4 +116,5 @@ public class StreetMapDataInterpreter implements Interpreter {
 
         return results;
     }
+
 }
