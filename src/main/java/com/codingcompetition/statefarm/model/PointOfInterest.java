@@ -13,6 +13,11 @@ public class PointOfInterest {
         descriptors = new HashMap<>();
     }
 
+    public PointOfInterest(String latitude, String longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public Map<Object,String> getDescriptors() {
         return this.descriptors;
     }
