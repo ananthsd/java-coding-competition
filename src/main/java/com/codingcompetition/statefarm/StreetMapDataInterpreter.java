@@ -33,17 +33,25 @@ public class StreetMapDataInterpreter implements Interpreter {
 
     @Override
     public List<PointOfInterest> interpret(SearchCriteria criteria) {
-
+        if (criteria == null) {
+            return new ArrayList<>();
+        }
         return null;
     }
 
     @Override
     public List<PointOfInterest> interpret(Map<Integer, SearchCriteria> prioritizedCriteria) {
+        if (prioritizedCriteria == null) {
+            return new ArrayList<>();
+        }
         return null;
     }
 
     @Override
     public List<PointOfInterest> findByCriterias(List<SearchCriteria> criterias) {
+        if (criterias == null) {
+            return new ArrayList<>();
+        }
         return null;
     }
 }
