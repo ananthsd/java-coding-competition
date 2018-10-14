@@ -45,7 +45,7 @@ public class StreetMapDataInterpreter implements Interpreter {
     private boolean fitsCriteria(PointOfInterest p, SearchCriteria c) {
         if (c.getCat().name().equals("NAMESTARTSWITH")) {
             String name = p.getDescriptors().get("name");
-            if (name != null && name.startsWith(c.getValue())) {
+            if (name != null && name.startsWith(c.getValue().toLowerCase())) {
                 return true;
             }
 
@@ -53,7 +53,7 @@ public class StreetMapDataInterpreter implements Interpreter {
 
         } else if (c.getCat().name().equals("NAMEENDSWITH")) {
             String name = p.getDescriptors().get("name");
-            if (name != null && name.endsWith(c.getValue())) {
+            if (name != null && name.endsWith(c.getValue().toLowerCase())) {
                 return true;
             }
 
