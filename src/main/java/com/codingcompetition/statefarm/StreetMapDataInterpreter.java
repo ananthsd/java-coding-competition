@@ -2,12 +2,11 @@ package com.codingcompetition.statefarm;
 
 import com.codingcompetition.statefarm.model.PointOfInterest;
 import com.codingcompetition.statefarm.utility.PointOfInterestParser;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
 
 public class StreetMapDataInterpreter implements Interpreter {
 
