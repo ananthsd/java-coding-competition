@@ -35,19 +35,16 @@ public class StreetMapDataInterpreter implements Interpreter {
 
     private boolean fitsCriteria(PointOfInterest p, SearchCriteria c) {
         if (c.getCat().name().equals("NAMESTARTSWITH")) {
-            Collection<String> descriptorValues = p.getDescriptors().values();
-            for (String dV: descriptorValues) {
-                if (dV.startsWith(c.getValue())) {
-                    return true;
-                }
+            String name = p.getDescriptors().get("name");
+            if (name != null && name.startsWith(c.getValue())) {
+                System.out.println("");
+                return true;
             }
 
         } else if (c.getCat().name().equals("NAMEENDSWITH")) {
-            Collection<String> descriptorValues = p.getDescriptors().values();
-            for (String dV: descriptorValues) {
-                if (dV.endsWith(c.getValue())) {
-                    return true;
-                }
+            String name = p.getDescriptors().get("name");
+            if (name != null && name.endsWith(c.getValue())) {
+                return true;
             }
 
         } else {
