@@ -14,6 +14,10 @@ public class StreetMapDataInterpreter implements Interpreter {
     private String filename;
     private List<PointOfInterest> points;
 
+    /**
+     * Creates object by which to query.
+     * @param s filename
+     */
     public StreetMapDataInterpreter(String s) {
         this.filename = s;
         PointOfInterestParser parser = new PointOfInterestParser();
@@ -25,14 +29,20 @@ public class StreetMapDataInterpreter implements Interpreter {
     }
 
     /**
-     *
-     * @return
+     * Gets List of all points
+     * @return points
      */
     @Override
     public List<PointOfInterest> interpret() {
         return this.points;
     }
 
+    /**
+     * Returns if a point meets a criteria
+     * @param p point
+     * @param c criteria
+     * @return does it fit
+     */
     private boolean fitsCriteria(PointOfInterest p, SearchCriteria c) {
         if (c.getCat().name().equals("NAMESTARTSWITH")) {
             String name = p.getDescriptors().get("name");
@@ -59,6 +69,11 @@ public class StreetMapDataInterpreter implements Interpreter {
         return false;
     }
 
+    /**
+     * Returns list of points that meet a single criteria
+     * @param criteria criteria to look for
+     * @return points that meet criteria
+     */
     @Override
     public List<PointOfInterest> interpret(SearchCriteria criteria) {
         List<PointOfInterest> results = new ArrayList<>();
@@ -76,6 +91,12 @@ public class StreetMapDataInterpreter implements Interpreter {
         return results;
     }
 
+    /**
+     * Searches through list of points in order of priority and
+     * returns list of points that match all criteria.
+     * @param prioritizedCriteria critieria prioritized
+     * @return list that matches all criteria
+     */
     @Override
     public List<PointOfInterest> interpret(Map<Integer, SearchCriteria> prioritizedCriteria) {
         List<PointOfInterest> results = new ArrayList<>();
@@ -103,6 +124,11 @@ public class StreetMapDataInterpreter implements Interpreter {
         return results;
     }
 
+    /**
+     * Returns list of points that matches any of the criteria.
+     * @param criterias list of criteria
+     * @return list of points that fits any of the criteria
+     */
     @Override
     public List<PointOfInterest> findByCriterias(List<SearchCriteria> criterias) {
         List<PointOfInterest> results = new ArrayList<>();
