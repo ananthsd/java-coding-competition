@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StreetMapDataInterpreter implements Interpreter {
@@ -26,6 +27,10 @@ public class StreetMapDataInterpreter implements Interpreter {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public List<PointOfInterest> interpret() {
         return this.points;
@@ -38,9 +43,33 @@ public class StreetMapDataInterpreter implements Interpreter {
             return results;
         }
 
+
+
         for (PointOfInterest p: this.points) {
+
+            if (criteria.getCat().name().equals("NAMESTARTSWITH")) {
+                Set<Object> descriptorKeys = p.getDescriptors().keySet();
+                for (Object dKey: descriptorKeys) {
+                    String dKeyString = (String)dKey;
+                    if (dKeyString.startsWith(criteria.getValue())) {
+                        results.add(p);
+                    }
+                }
+
+            } else if (criteria.getCat().name().equals("NAMEENDSWITH")) {
+                Set<Object> descriptorKeys = p.getDescriptors().keySet();
+                for (Object dKey: descriptorKeys) {
+                    String dKeyString = (String)dKey;
+                    if (dKeyString.endsWith(criteria.getValue())) {
+                        results.add(p);
+                    }
+                }
+
+            }
+
+
             String value = p.getDescriptors().get(criteria.getCat().name().toLowerCase());
-            if (value != null && value.equals(criteria.getValue())) {
+            if (criteria.getValue().equals(value)) {
                 results.add(p);
             }
 
