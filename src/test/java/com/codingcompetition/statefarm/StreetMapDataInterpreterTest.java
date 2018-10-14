@@ -50,6 +50,7 @@ public class StreetMapDataInterpreterTest {
 
     }
 
+    @Test
     public void returnsEmptyListWhenNullPassedIn() throws Exception {
         SearchCriteria nullCriteria = null;
         List<PointOfInterest> points = smallMetro.interpret(nullCriteria);

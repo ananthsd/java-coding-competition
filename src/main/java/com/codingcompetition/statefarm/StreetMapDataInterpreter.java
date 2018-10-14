@@ -33,6 +33,7 @@ public class StreetMapDataInterpreter implements Interpreter {
 
     @Override
     public List<PointOfInterest> interpret(SearchCriteria criteria) {
+
         return null;
     }
 
