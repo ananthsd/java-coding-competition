@@ -33,10 +33,20 @@ public class StreetMapDataInterpreter implements Interpreter {
 
     @Override
     public List<PointOfInterest> interpret(SearchCriteria criteria) {
+        List<PointOfInterest> results = new ArrayList<>();
         if (criteria == null) {
-            return new ArrayList<>();
+            return results;
         }
-        return null;
+
+        for (PointOfInterest p: this.points) {
+            String value = p.getDescriptors().get(criteria.getCat().name().toLowerCase());
+            if (value != null && value.equals(criteria.getValue())) {
+                results.add(p);
+            }
+
+        }
+
+        return results;
     }
 
     @Override
@@ -49,9 +59,22 @@ public class StreetMapDataInterpreter implements Interpreter {
 
     @Override
     public List<PointOfInterest> findByCriterias(List<SearchCriteria> criterias) {
+        List<PointOfInterest> results = new ArrayList<>();
         if (criterias == null) {
-            return new ArrayList<>();
+            return results;
         }
-        return null;
+
+        for (PointOfInterest p: this.points) {
+            for (SearchCriteria criteria: criterias) {
+                String value = p.getDescriptors().get(criteria.getCat().name().toLowerCase());
+                if (value != null && value.equals(criteria.getValue())) {
+                    results.add(p);
+                    break;
+                }
+            }
+
+        }
+
+        return results;
     }
 }
