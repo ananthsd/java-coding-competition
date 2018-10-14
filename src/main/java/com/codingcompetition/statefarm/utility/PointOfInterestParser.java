@@ -25,7 +25,7 @@ public class PointOfInterestParser {
     // Stacks for storing the elements and objects.
     private Stack<String> elements = new Stack<String>();
     private Stack<PointOfInterest> objects = new Stack<PointOfInterest>();
-
+    private String startLat, endLat, startLong, endLong;
 
     public List<PointOfInterest> parse(String fileName) throws IOException, SAXException {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
@@ -67,7 +67,23 @@ public class PointOfInterestParser {
                 }
             }
             if (qName.toLowerCase().equals("tag")) {
-                currentPoint.addDescriptor(attributes.getValue(0),attributes.getValue(1));
+                currentPoint.addDescriptor(attributes.getValue(0), attributes.getValue(1));
+            }
+            if (qName.toLowerCase().equals("bounds")) {
+                //minlat="40.4040000" minlon="-89.1067000" maxlat="40.5439000" maxlon="-88.8372000"
+                for (int i = 0; i < attributes.getLength(); i++) {
+                    if (attributes.getQName(i).equals("minlat")) {
+                        startLat = attributes.getValue(i);
+                    } else if (attributes.getQName(i).equals("minlon")) {
+                        startLong = attributes.getValue(i);
+                    } else if (attributes.getQName(i).equals("maxlat")) {
+                        endLat = attributes.getValue(i);
+                    } else if (attributes.getQName(i).equals("maxlon")) {
+                        endLong = attributes.getValue(i);
+                    }
+                    //System.out.println(attributes.getValue(i));
+                }
+
             }
         }
 
@@ -81,5 +97,21 @@ public class PointOfInterestParser {
         public List<PointOfInterest> getPoints() {
             return pointsOfInterest;
         }
+    }
+
+    public String getStartLat() {
+        return startLat;
+    }
+
+    public String getEndLat() {
+        return endLat;
+    }
+
+    public String getStartLong() {
+        return startLong;
+    }
+
+    public String getEndLong() {
+        return endLong;
     }
 }

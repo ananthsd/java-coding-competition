@@ -13,12 +13,16 @@ public class StreetMapDataInterpreter implements Interpreter {
 
     private String filename;
     private List<PointOfInterest> points;
-
+    private String startLat, endLat, startLong, endLong;
     public StreetMapDataInterpreter(String s) {
         this.filename = s;
         PointOfInterestParser parser = new PointOfInterestParser();
         try {
             this.points = parser.parse(this.filename);
+            startLat = parser.getStartLat();
+            endLat = parser.getEndLat();
+            startLong = parser.getStartLong();
+            endLong = parser.getEndLong();
         } catch (Exception e) {
             this.points = null;
         }
@@ -117,4 +121,19 @@ public class StreetMapDataInterpreter implements Interpreter {
         return results;
     }
 
+    public String getStartLat() {
+        return startLat;
+    }
+
+    public String getEndLat() {
+        return endLat;
+    }
+
+    public String getStartLong() {
+        return startLong;
+    }
+
+    public String getEndLong() {
+        return endLong;
+    }
 }
