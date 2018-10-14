@@ -1,4 +1,4 @@
-package main.java.com.codingcompetition.statefarm.utility;
+package com.codingcompetition.statefarm.utility;
 
 import com.codingcompetition.statefarm.model.PointOfInterest;
 import org.xml.sax.Attributes;
