@@ -109,6 +109,7 @@ public class StreetMapDataInterpreter implements Interpreter {
             for (SearchCriteria criteria: criterias) {
                 if (fitsCriteria(p, criteria)) {
                     results.add(p);
+                    break;
                 }
             }
 
