@@ -37,15 +37,18 @@ public class StreetMapDataInterpreter implements Interpreter {
         if (c.getCat().name().equals("NAMESTARTSWITH")) {
             String name = p.getDescriptors().get("name");
             if (name != null && name.startsWith(c.getValue())) {
-                System.out.println("");
                 return true;
             }
+
+            return false;
 
         } else if (c.getCat().name().equals("NAMEENDSWITH")) {
             String name = p.getDescriptors().get("name");
             if (name != null && name.endsWith(c.getValue())) {
                 return true;
             }
+
+            return false;
 
         } else {
             String value = p.getDescriptors().get(c.getCat().name().toLowerCase());
