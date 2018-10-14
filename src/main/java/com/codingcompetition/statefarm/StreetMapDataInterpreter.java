@@ -13,13 +13,22 @@ import java.util.stream.Collectors;
 
 public class StreetMapDataInterpreter implements Interpreter {
 
+    private String filename;
+    private List<PointOfInterest> points;
 
     public StreetMapDataInterpreter(String s) {
+        this.filename = s;
+        PointOfInterestParser parser = new PointOfInterestParser();
+        try {
+            this.points = parser.parse(this.filename);
+        } catch (Exception e) {
+            this.points = null;
+        }
     }
 
     @Override
     public List<PointOfInterest> interpret() {
-        return null;
+        return this.points;
     }
 
     @Override
