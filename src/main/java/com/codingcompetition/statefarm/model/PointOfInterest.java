@@ -18,7 +18,7 @@ public class PointOfInterest {
         this.longitude = longitude;
     }
 
-    public Map<Object,String> getDescriptors() {
+    public Map<Object, String> getDescriptors() {
         return this.descriptors;
     }
 
