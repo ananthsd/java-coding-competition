@@ -20,9 +20,10 @@ public class StreetMapDataInterpreter implements Interpreter {
     private String startLat, endLat, startLong, endLong;
     public StreetMapDataInterpreter(String s) {
         this.filename = s;
-        PointOfInterestParser parser = new PointOfInterestParser();
+
         try {
-            this.points = parser.parse(this.filename);
+            PointOfInterestParser parser = new PointOfInterestParser();
+            this.points = parser.parseFile(this.filename);
             startLat = parser.getStartLat();
             endLat = parser.getEndLat();
             startLong = parser.getStartLong();

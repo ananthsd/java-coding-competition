@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,26 +23,82 @@ public class PointOfInterestParser {
     private Stack<PointOfInterest> objects = new Stack<PointOfInterest>();
     private String startLat, endLat, startLong, endLong;
 
+    private SAXParserFactory saxParserFactory;
+
+    private FileWriter parseLineDestinationFile;
+
+
+    public PointOfInterestParser() {
+        this.saxParserFactory = SAXParserFactory.newInstance();
+    }
+
     /**
      * Parses XML file and returns list of PointOfInterest
      * @param fileName XML file
      * @return list of points of interest
      * @throws IOException file not found
-     * @throws SAXException XML parsing exception
+     * @throws SAXException SAX error
      */
-    public List<PointOfInterest> parse(String fileName) throws IOException, SAXException {
-        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+    public List<PointOfInterest> parseFile(String fileName) throws IOException, SAXException, ParserConfigurationException {
+        SAXParser saxParser = this.saxParserFactory.newSAXParser();
+        PointHandler pointHandler = new PointHandler();
+
         try {
-            SAXParser saxParser = saxParserFactory.newSAXParser();
-            PointHandler handler = new PointHandler();
-            saxParser.parse(new File("src/main/resources" + fileName), handler);
-            return handler.getPoints();
-        } catch (ParserConfigurationException e) {
-            throw new SAXException(e);
+            saxParser.parse(new File("src/main/resources" + fileName), pointHandler);
+        } catch (IOException io) {
+            throw new IOException(io);
+        }
+
+        return pointHandler.getPoints();
+    }
+
+    /**
+     * Must be called before the user starts reading in XML line by line.
+     * @throws IOException Destination file was unable to be created.
+     */
+    public void startParseLine() throws IOException {
+        try {
+            this.parseLineDestinationFile = new FileWriter(new File("src/main/resources/temp.xml"), false);
+        } catch (IOException io) {
+            throw new IOException(io);
         }
     }
 
-    //Handler to parse data with SAX
+    /**
+     * Reads in a line of XML
+     * @param line line of XML
+     * @throws IOException Destination file could not be appended to.
+     */
+    public void parseLine(String line) throws IOException {
+        this.parseLineDestinationFile.append(line);
+
+    }
+
+    /**
+     * Must be called after the user finishes reading in XML line by line.
+     * @return List of Points of Interest
+     * @throws IOException Destination file could not be closed.
+     * @throws SAXException Parser encounters errpr while parsing.
+     * @throws ParserConfigurationException Parser could not be created.
+     */
+    public List<PointOfInterest> endParseLine() throws IOException, SAXException, ParserConfigurationException {
+        this.parseLineDestinationFile.close();
+        SAXParser saxParser = this.saxParserFactory.newSAXParser();
+        PointHandler pointHandler = new PointHandler();
+
+        try {
+            saxParser.parse(new File("src/main/resources/temp.xml"), pointHandler);
+        } catch (IOException io) {
+            throw new SAXException(io);
+        }
+
+        return pointHandler.getPoints();
+    }
+
+
+
+
+    //Handler to parseFile data with SAX
     private class PointHandler extends DefaultHandler {
         private List<PointOfInterest> pointsOfInterest;
         private PointOfInterest currentPoint;
