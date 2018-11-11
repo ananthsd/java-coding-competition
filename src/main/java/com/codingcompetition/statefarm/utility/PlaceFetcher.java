@@ -10,7 +10,6 @@ public class PlaceFetcher {
         city = city.toLowerCase().replace(' ', '-');
         state = state.toLowerCase();
         String f = String.format("https://nominatim.openstreetmap.org/search?format=xml&country=USA&state=%s&city=%s", state, city);
-        System.out.println(f);
         URL url = new URL(f);
         URLConnection urlConnection = url.openConnection();
         StringBuilder dest = new StringBuilder();

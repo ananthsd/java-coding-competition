@@ -43,9 +43,9 @@ public class PlaceParser {
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             if (qName.equals("place")) {
                 for (int i = 0; i < attributes.getLength(); i++) {
-                    if (attributes.getQName(i).equals("lat")) {
+                    if (attributes.getQName(i).equals("lat") && this.latitude == 0D) {
                         this.latitude = Double.parseDouble(attributes.getValue(i));
-                    } else if (attributes.getQName(i).equals("lon")) {
+                    } else if (attributes.getQName(i).equals("lon") && longitude == 0D) {
                         this.longitude = Double.parseDouble(attributes.getValue(i));
                     }
                 }

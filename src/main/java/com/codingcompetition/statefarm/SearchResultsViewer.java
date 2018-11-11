@@ -14,12 +14,12 @@ public class SearchResultsViewer extends Application {
     public void start(Stage stage) {
         Label basicSearchLabel = new Label("Basic Search");
 
-        Label cityLabel = new Label("City   ");
+        Label cityLabel = new Label("City           ");
         TextField cityField = new TextField();
         HBox cityBox = new HBox(cityLabel, cityField);
         cityBox.setSpacing(5);
 
-        Label stateLabel = new Label("State ");
+        Label stateLabel = new Label("State         ");
         TextField stateField = new TextField();
         HBox stateBox = new HBox(stateLabel, stateField);
         stateBox.setSpacing(5);
@@ -28,9 +28,7 @@ public class SearchResultsViewer extends Application {
         basicSearchCriteriaBox.setSpacing(5);
 
         Button submitBasicSearchButton = new Button("Submit");
-        submitBasicSearchButton.setOnAction(event -> {
-            // TODO basic search
-        });
+
 
         VBox basicSearchBox = new VBox(basicSearchLabel,
                                     basicSearchCriteriaBox,
@@ -62,30 +60,37 @@ public class SearchResultsViewer extends Application {
                                     submitAdvancedSearchCriteriaButton);
         advancedSearchBox.setSpacing(5);
 
+        VBox searchBox = new VBox(basicSearchBox, advancedSearchBox);
+        searchBox.setSpacing(40);
+
         // BorderPane b = new BorderPane();
         MapView m = new MapView();
         m.setAnimationDuration(500);
         // b.setCenter(m);
         m.setCenter(new Coordinate(33.7488889D, -84.3880556D));
-        m.setZoom(7D);
+        m.setZoom(10D);
         m.setMinSize(700D, 800D);
         m.initialize();
-        HBox mainBox = new HBox(basicSearchBox, advancedSearchBox, m);
+        HBox mainBox = new HBox(searchBox, m);
         mainBox.setSpacing(10);
         mainBox.setPadding(new Insets(10, 10, 10, 10));
 
+        submitBasicSearchButton.setOnAction(event -> {
+            ViewController.performBasicSearch(cityField.getText(), stateField.getText(), m);
+        });
+
         submitAdvancedSearchCriteriaButton.setOnAction(event -> {
-            try {
-                double latitude = Double.parseDouble(latitudeField.getText());
-                double longitude = Double.parseDouble(longitudeField.getText());
-                m.setCenter(new Coordinate(latitude, longitude));
-            } catch (Exception e) {
-                System.out.println("Invalid latitude/longitude");
-            }
+
+            ViewController.performAdvancedSearch(Double.parseDouble(latitudeField.getText()),
+                    Double.parseDouble(longitudeField.getText()), m);
+
+
+
         });
 
         Scene s = new Scene(mainBox);
 
+        stage.setTitle("Risk Prediction");
         stage.setScene(s);
         stage.show();
 
