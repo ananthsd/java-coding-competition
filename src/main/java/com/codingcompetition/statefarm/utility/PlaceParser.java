@@ -1,5 +1,6 @@
 package com.codingcompetition.statefarm.utility;
 
+import com.sothawo.mapjfx.Coordinate;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -17,21 +18,21 @@ public class PlaceParser {
         this.saxParserFactory = SAXParserFactory.newInstance();
     }
 
-    public double[] parse(String xml) throws Exception {
-        FileWriter writer = new FileWriter(new File("src/main/resources/place.xml"), false);
-        writer.write(xml);
-        writer.close();
+    public Coordinate parse(String city, String state) throws Exception {
+
+        city = city.toLowerCase().replace(' ', '-');
+        state = state.toLowerCase();
 
         SAXParser saxParser = this.saxParserFactory.newSAXParser();
         PlaceHandler handler = new PlaceHandler();
 
         try {
-            saxParser.parse(new File("src/main/resources/place.xml"), handler);
+            saxParser.parse(new File(String.format("cache/places/%s-%s.xml", city, state)), handler);
         } catch (IOException io) {
             throw new SAXException(io);
         }
 
-        return new double[] {handler.getLatitude(), handler.getLongitude()};
+        return new Coordinate(handler.getLatitude(), handler.getLongitude());
     }
 
     private class PlaceHandler extends DefaultHandler {

@@ -3,6 +3,7 @@ package com.codingcompetition.statefarm;
 import com.sothawo.mapjfx.Coordinate;
 import com.sothawo.mapjfx.MapType;
 import com.sothawo.mapjfx.MapView;
+import com.sothawo.mapjfx.Marker;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.application.Application;
@@ -10,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-public class SearchResultsViewer extends Application {
+public class View extends Application {
     public void start(Stage stage) {
         Label basicSearchLabel = new Label("Basic Search");
 
@@ -71,9 +72,11 @@ public class SearchResultsViewer extends Application {
         m.setZoom(10D);
         m.setMinSize(700D, 800D);
         m.initialize();
+        ViewController.cacheMapOffiline(m);
         HBox mainBox = new HBox(searchBox, m);
         mainBox.setSpacing(10);
         mainBox.setPadding(new Insets(10, 10, 10, 10));
+
 
         submitBasicSearchButton.setOnAction(event -> {
             ViewController.performBasicSearch(cityField.getText(), stateField.getText(), m);
@@ -93,6 +96,8 @@ public class SearchResultsViewer extends Application {
         stage.setTitle("Risk Prediction");
         stage.setScene(s);
         stage.show();
+
+
 
 
 
