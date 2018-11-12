@@ -20,10 +20,12 @@ public class PointOfInterestFetcher {
                 new InputStreamReader(
                         urlConnection.getInputStream()));
         String inputLine;
-
-        while ((inputLine = in.readLine()) != null)
-            System.out.println(inputLine);
+        FileWriter writer = new FileWriter(new File("src/main/resources/poi.xml"), false);
+        while ((inputLine = in.readLine()) != null) {
+            writer.append(inputLine);
+        }
         in.close();
+        writer.close();
     }
 
     public static void main(String[] args) {
