@@ -19,7 +19,7 @@ public class PlaceFetcher {
             String f = String.format("https://nominatim.openstreetmap.org/search?format=xml&country=USA&state=%s&city=%s", state, city);
             URL url = new URL(f);
             URLConnection urlConnection = url.openConnection();
-
+            urlConnection.addRequestProperty("User-Agent", "java-coding-competition");
             FileWriter writer = new FileWriter(file);
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(
