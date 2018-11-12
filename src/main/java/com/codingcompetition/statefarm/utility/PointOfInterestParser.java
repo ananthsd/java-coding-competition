@@ -44,7 +44,7 @@ public class PointOfInterestParser {
         PointHandler pointHandler = new PointHandler();
 
         try {
-            saxParser.parse(new File("src/main/resources" + fileName), pointHandler);
+            saxParser.parse(new File(fileName), pointHandler);
         } catch (IOException io) {
             throw new IOException(io);
         }

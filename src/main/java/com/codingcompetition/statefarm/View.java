@@ -4,10 +4,13 @@ import com.sothawo.mapjfx.Coordinate;
 import com.sothawo.mapjfx.MapType;
 import com.sothawo.mapjfx.MapView;
 import com.sothawo.mapjfx.Marker;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.application.Application;
 import javafx.scene.control.*;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -89,6 +92,10 @@ public class View extends Application {
 
 
 
+        });
+
+        m.setOnZoom(event -> {
+            ViewController.refreshMarkers(m);
         });
 
         Scene s = new Scene(mainBox);
